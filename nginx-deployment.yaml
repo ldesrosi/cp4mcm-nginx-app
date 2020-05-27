@@ -64,38 +64,3 @@ spec:
             memory: 128Mi
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
----
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    app: nginx-app 
-    release: nginx-app
-  name: nginx-svc
-spec:
-  ports:
-  - name: service
-    port: 8081
-    protocol: TCP
-  selector:
-    app: nginx-app
-    release: nginx-app
-  sessionAffinity: None
-  type: ClusterIP
----
-kind: Route
-apiVersion: route.openshift.io/v1
-metadata:
-  name: nginx-route
-  labels:
-    app: nginx
-  annotations:
-    openshift.io/host.generated: 'true'
-spec:
-  to:
-    kind: Service
-    name: nginx-svc
-    weight: 100
-  port:
-    targetPort: 8081
-  wildcardPolicy: None
